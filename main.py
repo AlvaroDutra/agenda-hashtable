@@ -21,7 +21,7 @@ class HashTable:
         if self.table[index] is not None:
             for valor in self.table[index]:
                 if valor[0] == key:
-                    print(f"O nome está no Index {index}")
+                    print(f"{key} está no Index {index}")
                     return True
         print("O nome não foi encontrado")
         return False
@@ -71,7 +71,8 @@ class PhoneBook:
         nome = input("Insira o nome do contato a ser adicionado: ")
         telefone = input("Insira o telefone do contato a ser adicionado: ")
         grau = input("Insira o grau do contato a ser adicionado: \n 1: Profissional \n 2: Amigo \n 3: Colega \n 4: Parceiro \n 5: Parente \n 6: Outro \n")
-        tabelahash.insert(Contato(nome, telefone, grau))
+        novo_contato =  Contato(nome, telefone, grau)
+        tabelahash.insert(novo_contato.nome ,novo_contato.telefone, novo_contato.grau)
         tabelahash.display()
 
     def get_contact(self):
