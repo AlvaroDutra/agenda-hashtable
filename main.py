@@ -60,9 +60,9 @@ class Contato:
                 grau = input("Insira o grau de proximidade do contato: ")
 
     def mostrar(self):
-        print(f"Nome: {nome}")
-        print(f"Telefone: {telefone}")
-        print(f"Grau: {grau}")
+        print(f"Nome: {self.nome}")
+        print(f"Telefone: {self.telefone}")
+        print(f"Grau: {self.grau}")
 
 tabelahash = HashTable(10)
 
