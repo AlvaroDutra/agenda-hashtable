@@ -20,21 +20,18 @@ class HashTable:
     def search(self, key):
         index = self.hash_function(key)
         if self.table[index] is not None:
-            for valor in self.table[index]:
-                if valor[0] == key:
-                    if self.table[index][1] == "⭐":
-                        print(f"Este contato é priorizado! ⭐")
-                    if self.table[index][1] == "🚫":
-                        print(f"Este contato está bloqueado! 🚫")
+            if self.table[index][0][0] == key:
+                if self.table[index][1] == "⭐":
+                    print(f"Este contato é priorizado! ⭐")
+                if self.table[index][1] == "🚫":
+                    print(f"Este contato está bloqueado! 🚫")
+                print(f"O contato {key} está no Índice {index}")
+                print(f"O número do contato {key}: {self.table[index][0][1][0]} \n"
+                      f"O grau de proximidade do contato {key}: {self.table[index][0][1][1]} \n")
 
-                    print(f"O contato {key} está no Índice {index}")
-                    print(f"O número do contato {key}: {self.table[index][0][1][0]} \n"
-                          f"O grau de proximidade do contato {key}: {self.table[index][0][1][1]} \n")
-
-                    continuar = input("Aperte qualquer tecla para voltar... \n")
-                    if continuar is not None:
-                        continue
-                    return True
+                continuar = input("Aperte qualquer tecla para voltar... \n")
+                if continuar is not None:
+                    pass
 
         else: print(f"O contato {key} não existe \n")
         return False
