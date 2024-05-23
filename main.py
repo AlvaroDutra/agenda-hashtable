@@ -12,36 +12,46 @@ class HashTable:
     def insert(self, key, *value):
         index = self.hash_function(key)
         if self.table[index] is None:
-            self.table[index] = [(key, value)]
+            self.table[index] = [(key, value), None]
         else:
-            self.table[index].append((key, value))
+            print(f"Colisão detectada no índice {index}! Contato {self.table[index][0][0]} sobrescrito.")
+            self.table[index] = [(key, value), None]
 
     def search(self, key):
         index = self.hash_function(key)
         if self.table[index] is not None:
             for valor in self.table[index]:
                 if valor[0] == key:
+                    if self.table[index][1] == "⭐":
+                        print(f"Este contato é priorizado! ⭐")
+                    if self.table[index][1] == "🚫":
+                        print(f"Este contato está bloqueado! 🚫")
+
                     print(f"O contato {key} está no Índice {index}")
-                    print(f"O número do contato {key}: {valor[1][0]} \nO grau de proximidade do contato {key}: {valor[1][1]} ")
-                    continuar = input("Aperte qualquer tecla para voltar...")
+                    print(f"O número do contato {key}: {self.table[index][0][1][0]} \n"
+                          f"O grau de proximidade do contato {key}: {self.table[index][0][1][1]} \n")
+
+                    continuar = input("Aperte qualquer tecla para voltar... \n")
                     if continuar is not None:
                         continue
                     return True
-        print(f"O contato {key} não existe")
+
+        else: print(f"O contato {key} não existe \n")
         return False
 
     def display(self):
         # Mostra todos os contatos menos os bloqueados
         for i, slot in enumerate(self.table):
-            if slot is not None:
+            if self.table[i] is not None:
                 if "🚫" in slot:
                     pass
                 else:
-                    for valor in self.table[i]:
-                        print(
-                            f"O nome do contato no índice {i} é {valor[0]} \n"
-                            f"O número do contato no índice {i} é {valor[1][0]} \n"
-                            f"O grau de proximidade do contato no índice {i} é {valor[1][1]} \n")
+                    if self.table[i][1] == "⭐":
+                        print(f"Este contato é priorizado! ⭐")
+                    print(
+                    f"Contato: {self.table[i][0][0]} \n"
+                    f"Número: {self.table[i][0][1][0]} \n"
+                    f"Proximidade: {self.table[i][0][1][1]} \n")
 
     def display_prio(self):
         # Mostra apenas os contatos priorizados
@@ -50,11 +60,10 @@ class HashTable:
                 if "⭐" not in slot:
                     pass
                 else:
-                    for valor in self.table[i]:
-                        print(
-                            f"O nome do contato no índice {i} é {valor[0]} \n"
-                            f"O número do contato no índice {i} é {valor[1][0]} \n"
-                            f"O grau de proximidade do contato no índice {i} é {valor[1][1]} \n")
+                    print(
+                    f"Contato ⭐: {self.table[i][0][0]} \n"
+                    f"Número: {self.table[i][0][1][0]} \n"
+                    f"Proximidade: {self.table[i][0][1][1]} \n")
 
     def display_block(self):
         # Mostra apenas os contatos bloqueados
@@ -63,28 +72,53 @@ class HashTable:
                 if "🚫" not in slot:
                     pass
                 else:
-                    for valor in self.table[i]:
-                        print(
-                            f"O nome do contato no índice {i} é {valor[0]} \n"
-                            f"O número do contato no índice {i} é {valor[1][0]} \n"
-                            f"O grau de proximidade do contato no índice {i} é {valor[1][1]} \n")
+                    print(
+                    f"Contato 🚫: {self.table[i][0][0]} \n"
+                    f"Número: {self.table[i][0][1][0]} \n"
+                    f"Proximidade: {self.table[i][0][1][1]} \n")
 
     def delete(self, key):
         index = self.hash_function(key)
         if self.table[index] is not None:
-            for i, slot in enumerate(self.table[index]):
-                if slot[0] == key:
-                    self.table[index].pop(i)
-                    return True
-            return False
+            self.table[index] = None
 
     def priorize(self, key):
+        despriorizar = False
         index = self.hash_function(key)
-        self.table[index].append("⭐")
+        if self.table[index] is not None:
+            if self.table[index][1] != "⭐":
+                self.table[index][1] = ("⭐")
+                print(f"Contato {self.table[index][0][0]} priorizado.")
+            else:
+                while despriorizar != "Y" and despriorizar != "y" and despriorizar != "N" and despriorizar != "n":
+                    despriorizar = input("Esse contato já está priorizado. Deseja despriorizá-lo? (Y/N) \n")
+                    if despriorizar == "Y" or despriorizar == "y":
+                        print(f"Despriorizando o contato {self.table[index][0][0]}...")
+                        self.table[index][1] = None
+                    elif despriorizar == "N" or despriorizar == "n":
+                        print(f"Voltando...")
+                    else:
+                        print("Comando incorreto! Use Y/N. \n")
+        else: print("O contato não existe")
 
     def block(self, key):
+        desbloquear = False
         index = self.hash_function(key)
-        self.table[index].append("🚫")
+        if self.table[index] is not None:
+            if self.table[index][1] != "🚫":
+                self.table[index][1] = ("🚫")
+                print(f"Contato {self.table[index][0][0]} bloqueado.")
+            else:
+                while desbloquear != "Y" and desbloquear != "y" and desbloquear != "N" and desbloquear != "n":
+                    desbloquear = input("Esse contato já está bloqueado. Deseja desbloqueá-lo? (Y/N) \n")
+                    if desbloquear == "Y" or desbloquear == "y":
+                        print(f"Desbloqueando o contato {self.table[index][0][0]}... \n")
+                        self.table[index][1] = None
+                    elif desbloquear == "N" or desbloquear == "n":
+                        print(f"Voltando...")
+                    else:
+                        print("Comando incorreto! Use Y/N. \n")
+        else: print("O contato não existe")
 
 class Contato:
     def __init__(self, nome, telefone, grau):
@@ -142,11 +176,22 @@ class PhoneBook:
 
 if __name__ == '__main__':
     print("AGENDA TABELA HASH")
-    tabelahash = HashTable(100)
+    print(f"Antes de continuarmos, vamos definir o tamanho da sua agenda.")
+    print(f"Isso é importante! Ela não poderá ser alterada até o programa ser reiniciado e, consequentemente, seus contatos perdidos!")
+    tamanho = int(input("Escolha um número entre 25 e 2000: \n"))
+    if tamanho < 25:
+        print("Lista muito pequena! Definindo o tamanho como 25...")
+        tamanho = 25
+    elif tamanho > 2000:
+        print("Lista muito grande! Definindo o tamanho como 2000...")
+        tamanho = 2000
+    else:
+        print(f"Tamanho da tabela definido como {tamanho}.")
+        tabelahash = HashTable(tamanho)
+
     while True:
         nav = str(input(" 1. ADICIONAR CONTATO \n 2. BUSCAR CONTATO \n 3. REMOVER CONTATO \n 4. EXIBIR CONTATOS \n 5. PRIORIZAR CONTATO \n 6. BLOQUEAR CONTATO \n 7. FECHAR AGENDA \n"))
         agenda = PhoneBook()
-
         match nav:
             case "1":
                 agenda.add_contact()
